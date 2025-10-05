@@ -72,6 +72,8 @@ Before running this project, ensure you have the following installed:
 - **Google Gemini API Key**: Required for OCR functionality
   - Get from: https://makersuite.google.com/app/apikey
   - Free tier available with reasonable limits
+  - **edit the Api key in Answer-check-using-NLP\backend\app.py
+  - line no. 26**
 
 ### System Dependencies (Required for PDF OCR)
 - **Poppler** (for pdf2image library)
