@@ -7,7 +7,7 @@ from typing import List
 def clean_extracted_text(text: str) -> str:
     """
     Cleans raw OCR or extracted text by removing common formatting and collapsing spaces.
-    This step is crucial for preparing text for NLP analysis.
+    This function is crucial for NLP accuracy.
     """
     if not text:
         return ""
@@ -25,11 +25,12 @@ def clean_extracted_text(text: str) -> str:
 
 def get_text_quality_score(text: str) -> float:
     """
-    Placeholder function for calculating a quality score.
+    Calculates a quality score based on content density. (Used as a metric in your API response).
     """
     if not text:
         return 0.0
 
+    # Example logic: ratio of letter/number characters to total characters
     alpha_numeric_count = len(re.sub(r'[^a-zA-Z0-9]', '', text))
     total_length = len(text)
 
@@ -41,7 +42,7 @@ def get_text_quality_score(text: str) -> float:
 
 def get_improvement_suggestions(text: str) -> str:
     """
-    Placeholder function for providing text clarity suggestions.
+    Provides suggestions for improving text clarity. (Used in your API response).
     """
     if len(text.split()) < 5:
         return "Extracted text is very short; check if the entire document was processed."
