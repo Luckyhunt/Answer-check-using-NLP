@@ -21,3 +21,47 @@
     margin: 30px auto;
     justify-content: space-around;
 }
+
+.Upload__btn {
+    margin-top: 40px;
+}
+
+.link__btn {
+    background: #009688;
+    border-radius: 6px;
+    padding: 15px 30px;
+    border: none;
+    outline: none;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.link__btn:hover:not(:disabled) {
+    background: #00796b;
+    transform: translateY(-2px);
+}
+
+.link__btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .Upload__title {
+        font-size: 30px;
+    }
+    
+    .Upload__container {
+        gap: 20px;
+    }
+    
+    .link__btn {
+        padding: 12px 25px;
+        font-size: 16px;
+    }
+}

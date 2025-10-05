@@ -8,6 +8,7 @@ import "./Upload.css"
 import useTextExtractionContext from "../../StateManager/TextExtraction"
 
 const Upload = () => {
+
     const navigation = useNavigate()
 
     const { fileData } = useFileContext()
@@ -37,6 +38,7 @@ const Upload = () => {
                 })
                 const studentResult = await sendStudentFiles.json()
                 setStudentText(studentResult.extracted_text)
+
 
                 navigation("/summary")
             }
