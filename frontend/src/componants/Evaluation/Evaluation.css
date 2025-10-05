@@ -1,64 +1,218 @@
 .Evaluation {
-    width: 900px;
+    max-width: 1200px;
     margin: 40px auto;
-    border-radius: 6px;
-    padding: 20px;
-    border: 1px solid lightgrey;
+    border-radius: 20px;
+    padding: 30px;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 150, 136, 0.1);
+    animation: fadeInUp 0.6s ease-out;
 }
 
 .Evaluation__title {
-    font-weight: bold;
-    font-size: 20px;
+    font-weight: 700;
+    font-size: 28px;
+    color: var(--primary);
+    text-align: center;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.Evaluation__title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary), #00796b);
+    border-radius: 2px;
 }
 
 .Evaluation__feedback {
-    margin: 20px auto;
-    border-radius: 7px;
-    width: 800px;
-    height: 250px;
-    background: var(--primary-ll);
-    padding: 20px;
+    margin: 30px auto;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 800px;
+    background: linear-gradient(135deg, var(--primary-l) 0%, rgba(0, 150, 136, 0.05) 100%);
+    padding: 30px;
+    box-shadow: 0 8px 32px rgba(0, 150, 136, 0.1);
+    border: 1px solid rgba(0, 150, 136, 0.2);
+    animation: slideInFromBottom 0.8s ease-out 0.2s both;
 }
 
 .Evaluation__feedback__title {
     text-align: center;
     color: var(--primary);
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 25px;
 }
 
 .Evaluation__feedback__result {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
     align-items: center;
+    gap: 40px;
 }
 
 .Evaluation__feedback__percent {
-    font-size: 60px;
-    font-weight: bold;
+    font-size: 72px;
+    font-weight: 800;
     color: var(--primary);
-    display: grid;
-    place-items: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    animation: countUp 1.5s ease-out 0.5s both;
 }
 
 .Evaluation__feedback__percent span {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 600;
-    display: block;
+    color: #2c3e50;
+    margin-top: 8px;
+    text-align: center;
+    max-width: 200px;
 }
 
 .Evaluation__feedback__meter {
-    width: 50px;
-    height: 180px;
-    background: rgb(219, 219, 219);
-    /* background: var(--primary-l); */
+    width: 60px;
+    height: 200px;
+    background: linear-gradient(180deg, #e0e0e0 0%, #f0f0f0 100%);
     position: relative;
     overflow: hidden;
-    border-radius: 8px;
+    border-radius: 30px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.5);
 }
 
 .Evaluation__feedback__bar {
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: 50%;
-    background: var(--primary);
+    height: 0%; /* Start from 0 instead of 50% */
+    background: linear-gradient(180deg, var(--primary) 0%, #00796b 100%);
+    border-radius: 0 0 26px 26px;
+    box-shadow: 0 0 20px rgba(0, 150, 136, 0.4);
+    /* Remove conflicting animation, let inline styles control the final value */
+    transition: height 2s ease-out 0.8s, width 2s ease-out 0.8s;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInFromBottom {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes countUp {
+    from {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes fillUp {
+    from {
+        height: 0;
+    }
+    to {
+        height: var(--final-height, 50%);
+    }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .Evaluation {
+        margin: 20px;
+        padding: 20px;
+    }
+
+    .Evaluation__title {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .Evaluation__feedback {
+        padding: 20px;
+        margin: 20px auto;
+    }
+
+    .Evaluation__feedback__result {
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .Evaluation__feedback__percent {
+        font-size: 60px;
+    }
+
+    .Evaluation__feedback__meter {
+        width: 100%;
+        height: 40px;
+        border-radius: 20px;
+    }
+
+    /* --- CRITICAL CSS CHANGES FOR MOBILE BAR ORIENTATION --- */
+    .Evaluation__feedback__bar {
+        /* OVERRIDE DESKTOP: ensure horizontal filling */
+        bottom: 0;   /* Starts filling from the bottom of the container */
+        left: 0;     /* Starts filling from the left edge (crucial for horizontal) */
+        width: 0%;   /* Start from 0% instead of 50% */
+
+        /* New border-radius for horizontal fill */
+        border-radius: 20px 0 0 20px;
+
+        /* Ensure transitions remain smooth for the property (width) that changes */
+        transition: width 2s ease-out 0.8s;
+    }
+
+    /* We also need to fix the keyframe animation for mobile */
+    @keyframes fillUp {
+        from {
+            /* Desktop start point */
+            height: 0;
+        }
+        to {
+            /* Desktop end point (final height set by JS) */
+            height: var(--final-height, 50%);
+        }
+    }
+
+    /* Although the JS sets the style directly, we override the default animation
+       to handle horizontal filling on mobile */
+    .Evaluation__feedback__bar[style*="width"] {
+        animation: fillHorizontal 2s ease-out 0.8s both;
+    }
+
+    @keyframes fillHorizontal {
+        from {
+            width: 0;
+        }
+        to {
+            /* This animation will be overridden by the JS style, but defines the intent */
+            width: 100%;
+        }
+    }
 }

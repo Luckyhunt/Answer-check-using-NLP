@@ -37,6 +37,19 @@ const Evaluation = () => {
         toneScore: 0
     })
     const { extractedText } = useTextExtractionContext()
+    const [isMobile, setIsMobile] = useState(false)
+
+    // Detect mobile screen size
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth <= 768)
+        }
+
+        checkMobile()
+        window.addEventListener('resize', checkMobile)
+
+        return () => window.removeEventListener('resize', checkMobile)
+    }, [])
 
     const wordCount = {
         model: extractedText.model.trim().split(/\s+/).length,
@@ -90,7 +103,17 @@ const Evaluation = () => {
         }
     }
 
-    const testScore = 0.1 * evaluation.keyword + 0.7 * evaluation.semantics + 0.2 * evaluation.toneScore
+    // Calculate the final score on a 0-100 scale
+    const finalScore =
+        (0.1 * evaluation.keyword * 100) + // Scale 0-1 (e.g., 0.8) -> (0.1 * 80) = 8
+        (0.7 * evaluation.semantics * 100) +
+        (0.2 * evaluation.toneScore * 100);
+
+    // Normalize back to 0-1 range for the bar logic (which uses testScore * 100)
+    const testScore = finalScore / 100;
+
+    // Calculate the display percentage once to ensure consistency
+    const displayPercentage = Math.round(testScore * 100);
 
     useEffect(() => {
         sendAnswerRequest()
@@ -125,9 +148,9 @@ const Evaluation = () => {
                 <h3 className="Evaluation__feedback__title">Test Results</h3>
                 <div className="Evaluation__feedback__result">
                     <div className="Evaluation__feedback__percent">
-                        { Math.round(testScore * 100) }%
+                        { displayPercentage }%
                         <span>
-                            { feedback(Math.round(testScore * 100)) }
+                            { feedback(displayPercentage) }
                         </span>
                     </div>
                     <div
@@ -135,9 +158,27 @@ const Evaluation = () => {
                     >
                         <div
                             className="Evaluation__feedback__bar"
-                            style={{
-                                height: `${Math.round(testScore * 100)}%`
-                            }}
+                            style={
+                                (() => {
+                                    // Use the same percentage value as the display
+                                    const percentValue = `${displayPercentage}%`;
+
+                                    // If isMobile is true (short, wide container in CSS) -> fill horizontally (width)
+                                    return isMobile
+                                        ? {
+                                              width: percentValue, // Percentage controls the WIDTH
+                                              height: '100%',      // Bar fills meter height
+                                              left: 0,             // Starts filling from the left
+                                              bottom: 'auto'       // Ignore vertical alignment
+                                          }
+                                        : {
+                                              // If isMobile is false (tall, narrow container in CSS) -> fill vertically (height)
+                                              height: percentValue, // Percentage controls the HEIGHT
+                                              width: '100%',        // Bar fills meter width
+                                              bottom: 0             // Starts filling from the bottom
+                                          };
+                                })()
+                            }
                         >
                         </div>
                     </div>

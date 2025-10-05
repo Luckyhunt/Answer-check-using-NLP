@@ -37,8 +37,18 @@ def keyword_matching(model_answer, student_answer):
     processed_model = preprocess_text(model_answer)
     processed_student = preprocess_text(student_answer)
 
-    # returns matched_keywords and keyword overlap
-    return matched_keywords, len(matched_keywords) / len(processed_model) if len(processed_model) > 0 else 0
+    # Find matching keywords between model and student answers
+    for keyword in processed_model:
+        if keyword in processed_student:
+            matched_keywords.add(keyword)
+
+    # Calculate overlap percentage
+    overlap_percentage = len(matched_keywords) / len(processed_model) if len(processed_model) > 0 else 0
+
+    print(f"📊 Keyword matching: {len(matched_keywords)} matches out of {len(processed_model)} keywords")
+    print(f"📊 Matched keywords: {list(matched_keywords)[:10]}...")  # Show first 10 matches
+
+    return matched_keywords, overlap_percentage
 
 
 def semantic_similarity(model_answer, student_answer):

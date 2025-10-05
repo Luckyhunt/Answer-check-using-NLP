@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react"
+import { useRef } from "react"
 import useFileContext from "../../StateManager/FileContext"
 
 import { CiCirclePlus } from "react-icons/ci"
@@ -7,22 +7,57 @@ import { FiUploadCloud } from "react-icons/fi"
 import "./Dropbox.css"
 
 const Dropbox = ({ type }) => {
-
     const inputRef = useRef(null)
     const { fileData, addStudentFile, addModelFile } = useFileContext()
-    
+
+    const validateAndAddFile = (file, fileType) => {
+        if (!file) return
+
+        // Validate file type
+        const allowedTypes = [
+            'application/pdf',
+            'image/png',
+            'image/jpeg',
+            'image/jpg',
+            'image/gif',
+            'image/bmp',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'application/msword',
+            'text/plain'
+        ]
+
+        const allowedExtensions = ['.pdf', '.png', '.jpg', '.jpeg', '.gif', '.bmp', '.docx', '.doc', '.txt']
+
+        const fileExtension = file.name.toLowerCase().substring(file.name.lastIndexOf('.'))
+
+        if (!allowedTypes.includes(file.type) && !allowedExtensions.includes(fileExtension)) {
+            alert('Please select a supported file type: PDF, PNG, JPG, JPEG, GIF, BMP, DOCX, DOC, or TXT')
+            return
+        }
+
+        // Validate file size (max 10MB)
+        const maxSize = 10 * 1024 * 1024 // 10MB
+        if (file.size > maxSize) {
+            alert('File size must be less than 10MB.')
+            return
+        }
+
+        // Add file based on type
+        if (fileType === "model") {
+            addModelFile(file)
+        } else {
+            addStudentFile(file)
+        }
+    }
+
     const handleModelFileChange = e => {
         const file = e.target.files[0]
-        if (file) {
-            addModelFile(file)
-        }
+        validateAndAddFile(file, "model")
     }
 
     const handleStudentFileChange = e => {
         const file = e.target.files[0]
-        if (file) {
-            addStudentFile(file)
-        }
+        validateAndAddFile(file, "student")
     }
 
     const handleContainerClick = () => {
@@ -45,9 +80,9 @@ const Dropbox = ({ type }) => {
                 }}
                 className="Dropbox__input"
                 type="file"
-                accept=".pdf"
+                accept=".pdf,.png,.jpg,.jpeg,.gif,.bmp,.docx,.doc,.txt"
                 id="fileInput"
-                multiple={type !== "model"}
+                multiple={false}
                 ref={inputRef}
             />
             <div className="Dropbox__upload-icon">
@@ -63,8 +98,8 @@ const Dropbox = ({ type }) => {
             <p className="Dropbox__desc">
                 {
                     type === "model" ?
-                    <span>Upload the official answer key for comparison</span> :
-                    <span>Click to upload multiple student submissions.</span>
+                    <span>Upload the official answer key (PDF, DOCX, TXT, Images)</span> :
+                    <span>Upload student's answer sheet (PDF, DOCX, TXT, Images)</span>
                 }
             </p>
             <div className="Dropbox__plus-icon">

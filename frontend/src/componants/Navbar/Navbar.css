@@ -1,35 +1,110 @@
 .Navbar {
     width: calc(100vw - 50px);
-    margin: 10px auto;
-    padding: 10px;
-    height: 60px;
+    margin: 20px auto;
+    padding: 15px 25px;
+    height: auto;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .Navbar__logo {
     display: flex;
     align-items: center;
-    font-weight: bold;
-    font-size: 20px;
-    margin: 0 auto;
+    font-weight: 700;
+    font-size: 24px;
+    color: var(--primary);
+    transition: transform 0.3s ease;
+}
+
+.Navbar__logo:hover {
+    transform: scale(1.05);
 }
 
 .Navbar__logo img {
-    width: 50px;
-    margin-right: 10px;
+    width: 45px;
+    height: 45px;
+    margin-right: 12px;
+    border-radius: 8px;
 }
 
 .Navbar__links {
-    margin: 0 auto;
+    display: flex;
+    gap: 30px;
 }
 
 .Navbar__links a {
-    margin: 10px;
+    padding: 10px 20px;
+    border-radius: 25px;
+    text-decoration: none;
     font-weight: 500;
+    font-size: 16px;
+    color: #555;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.Navbar__links a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 150, 136, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.Navbar__links a:hover::before {
+    left: 100%;
+}
+
+.Navbar__links a:hover {
+    color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 150, 136, 0.2);
 }
 
 .Navbar__links a.active {
-    color: var(--primary);
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 4px 15px rgba(0, 150, 136, 0.3);
+}
+
+.Navbar__links a.active::before {
+    display: none;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .Navbar {
+        flex-direction: column;
+        height: auto;
+        padding: 20px;
+        gap: 15px;
+    }
+
+    .Navbar__links {
+        gap: 15px;
+    }
+
+    .Navbar__links a {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+
+    .Navbar__logo {
+        font-size: 20px;
+    }
+
+    .Navbar__logo img {
+        width: 35px;
+        height: 35px;
+    }
 }

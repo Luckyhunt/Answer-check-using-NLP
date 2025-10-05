@@ -29,6 +29,24 @@
     font-weight: bold;
 }
 
+.SummaryFileDisplay__no-file {
+    width: 100%;
+    min-height: 350px;
+    margin-bottom: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f5f5f5;
+    border: 2px dashed #ccc;
+    border-radius: 10px;
+    color: #666;
+    font-size: 16px;
+}
+
+.SummaryFileDisplay__text-container {
+    margin-top: 10px;
+}
+
 .SummaryFileDisplay__extracted--text {
     font-size: 14px;
     padding: 20px;
@@ -40,4 +58,21 @@
     background-color: #f9f9f9;
     white-space: pre-wrap;
     box-sizing: border-box;
+}
+
+.SummaryFileDisplay__warning {
+    padding: 20px;
+    background-color: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 8px;
+    color: #856404;
+}
+
+.SummaryFileDisplay__warning p {
+    margin: 0 0 10px 0;
+}
+
+.SummaryFileDisplay__warning em {
+    font-style: italic;
+    color: #6c5ce7;
 }

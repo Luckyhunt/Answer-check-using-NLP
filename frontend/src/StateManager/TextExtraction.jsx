@@ -1,4 +1,4 @@
-import { useState, createContext, useContext } from "react"
+import { useState, createContext, useContext, useEffect } from "react"
 
 export const TextExtractionContext = createContext(null)
 
@@ -8,6 +8,26 @@ export const TextExtractionContextProvider = ({ children }) => {
         student: ""
     })
 
+    // Load extracted text from localStorage on mount
+    useEffect(() => {
+        const savedText = localStorage.getItem('extractedText')
+        if (savedText) {
+            try {
+                const parsed = JSON.parse(savedText)
+                setExtractedText(parsed)
+            } catch (error) {
+                console.error('Error loading saved extracted text:', error)
+            }
+        }
+    }, [])
+
+    // Save extracted text to localStorage whenever it changes
+    useEffect(() => {
+        if (extractedText.model || extractedText.student) {
+            localStorage.setItem('extractedText', JSON.stringify(extractedText))
+        }
+    }, [extractedText])
+
     const setModelText = text => {
         setExtractedText(prev => ({...prev, model: text}))
     }
@@ -16,10 +36,19 @@ export const TextExtractionContextProvider = ({ children }) => {
         setExtractedText(prev => ({...prev, student: text}))
     }
 
+    const clearText = () => {
+        setExtractedText({
+            model: "",
+            student: ""
+        })
+        localStorage.removeItem('extractedText')
+    }
+
     const value = {
         extractedText,
         setModelText,
-        setStudentText
+        setStudentText,
+        clearText
     }
 
     return (

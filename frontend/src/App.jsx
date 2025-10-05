@@ -20,7 +20,7 @@ function App() {
 				<TextExtractionContextProvider>
 					<Routes>
 							<Route path="/" Component={Home} />
-							<Route path="/Summary" Component={Summary} />
+							<Route path="/summary" Component={Summary} />
 					</Routes>
 				</TextExtractionContextProvider>
 			</div>

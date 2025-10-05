@@ -1,18 +1,50 @@
 .Dropbox {
     width: 350px;
     height: 300px;
-    border: 2px dashed #ccc;
-    border-radius: 10px;
+    border: 2px dashed #e0e0e0;
+    border-radius: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    position: relative;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+.Dropbox::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(0, 150, 136, 0.05) 0%, rgba(0, 150, 136, 0.02) 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
 }
 
 .Dropbox:hover {
     border-color: #009688;
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 12px 40px rgba(0, 150, 136, 0.15);
+}
+
+.Dropbox:hover::before {
+    opacity: 1;
+}
+
+.Dropbox--uploaded {
+    border-color: #4CAF50;
+    background: linear-gradient(135deg, #f0f9f0 0%, #e8f5e8 100%);
+    box-shadow: 0 4px 20px rgba(76, 175, 80, 0.15);
+}
+
+.Dropbox--uploaded::before {
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%, rgba(76, 175, 80, 0.05) 100%);
 }
 
 .Dropbox__input {
@@ -21,25 +53,103 @@
 
 .Dropbox__upload-icon {
     font-size: 64px;
-    color: #ccc;
+    color: #b0b0b0;
     margin-bottom: 20px;
+    transition: all 0.3s ease;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.Dropbox:hover .Dropbox__upload-icon {
+    color: #009688;
+    transform: scale(1.1);
+}
+
+.Dropbox--uploaded .Dropbox__upload-icon {
+    color: #4CAF50;
 }
 
 .Dropbox__title {
-    font-size: 20px;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 10px;
+    font-size: 22px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 12px;
+    text-align: center;
+    transition: color 0.3s ease;
+}
+
+.Dropbox:hover .Dropbox__title {
+    color: #009688;
+}
+
+.Dropbox--uploaded .Dropbox__title {
+    color: #4CAF50;
 }
 
 .Dropbox__desc {
     font-size: 16px;
-    color: #666;
+    color: #7f8c8d;
     text-align: center;
     margin-bottom: 20px;
+    line-height: 1.5;
+    max-width: 280px;
+    transition: color 0.3s ease;
+}
+
+.Dropbox:hover .Dropbox__desc {
+    color: #34495e;
 }
 
 .Dropbox__plus-icon {
     font-size: 32px;
-    color: #999;
+    color: #bdc3c7;
+    transition: all 0.3s ease;
+}
+
+.Dropbox:hover .Dropbox__plus-icon {
+    color: #009688;
+    transform: rotate(90deg) scale(1.1);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .Dropbox {
+        width: 300px;
+        height: 260px;
+    }
+
+    .Dropbox__upload-icon {
+        font-size: 56px;
+    }
+
+    .Dropbox__title {
+        font-size: 20px;
+    }
+
+    .Dropbox__desc {
+        font-size: 15px;
+        max-width: 250px;
+    }
+
+    .Dropbox__plus-icon {
+        font-size: 28px;
+    }
+}
+
+@media (max-width: 480px) {
+    .Dropbox {
+        width: 280px;
+        height: 240px;
+    }
+
+    .Dropbox__upload-icon {
+        font-size: 48px;
+    }
+
+    .Dropbox__title {
+        font-size: 18px;
+    }
+
+    .Dropbox__desc {
+        font-size: 14px;
+    }
 }

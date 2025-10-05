@@ -1,48 +1,310 @@
 .UploadedFiles {
+    margin: 40px 0;
+    padding: 0 20px;
+}
+
+.UploadedFiles__container {
     display: flex;
-    justify-content: space-around;
-    margin: 50px 0;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .UploadedFiles__section {
-    text-align: center;
+    flex: 1;
+    min-width: 300px;
+    max-width: 450px;
 }
 
 .UploadedFiles__title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
     font-size: 20px;
-    font-weight: bold;
-    color: #333;
+    font-weight: 700;
+    color: var(--primary);
     margin-bottom: 20px;
-}
-
-.FileComponant {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    background: #f0f0f0;
-    border: 1px solid #ddd;
-    border-radius: 8px;
     padding: 15px;
-    margin: 10px 0;
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(0, 150, 136, 0.1);
 }
 
-.FileComponant__icon {
+.UploadedFiles__title-icon {
     font-size: 24px;
-    color: #666;
+    animation: bounce 2s infinite;
 }
 
-.FileComponant__name {
-    font-weight: 500;
-    color: #333;
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-5px);
+    }
+    60% {
+        transform: translateY(-3px);
+    }
 }
 
-.UploadedFiles__msg {
+.UploadedFiles__content {
+    min-height: 120px;
+}
+
+.FileComponent {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border: 2px solid rgba(0, 150, 136, 0.2);
+    border-radius: 16px;
+    padding: 20px;
+    margin: 10px 0;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+}
+
+.FileComponent::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 150, 136, 0.05), transparent);
+    transition: left 0.5s ease;
+}
+
+.FileComponent:hover::before {
+    left: 100%;
+}
+
+.FileComponent:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(0, 150, 136, 0.15);
+    border-color: rgba(0, 150, 136, 0.4);
+}
+
+.FileComponent__icon {
+    font-size: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    color: #f44336;
+    min-width: 50px;
+    min-height: 50px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.FileComponent:hover .FileComponent__icon {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.FileComponent__info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.FileComponent__name {
     font-size: 16px;
-    padding: 15px;
+    font-weight: 600;
+    color: #2c3e50;
+    line-height: 1.3;
+    word-break: break-word;
+    transition: color 0.3s ease;
+}
+
+.FileComponent:hover .FileComponent__name {
+    color: var(--primary);
+}
+
+.FileComponent__details {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 5px;
+}
+
+.FileComponent__size {
+    font-size: 12px;
+    color: #7f8c8d;
+    background: rgba(127, 140, 141, 0.1);
+    padding: 4px 8px;
+    border-radius: 20px;
+    font-weight: 500;
+}
+
+.FileComponent__type {
+    font-size: 11px;
+    font-weight: 700;
+    color: #ffffff;
+    background: linear-gradient(135deg, var(--primary) 0%, #00796b 100%);
+    padding: 4px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 8px rgba(0, 150, 136, 0.3);
+}
+
+.FileComponent__actions {
+    display: flex;
+    align-items: center;
+}
+
+.FileComponent__remove {
+    background: #ff4757;
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(255, 71, 87, 0.3);
+}
+
+.FileComponent__remove:hover {
+    background: #ff3742;
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(255, 71, 87, 0.4);
+}
+
+.FileComponent__remove svg {
+    font-size: 16px;
+}
+
+.UploadedFiles__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    padding: 30px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    border: 2px dashed #e0e0e0;
+    border-radius: 16px;
+    color: #7f8c8d;
+    text-align: center;
+    min-height: 120px;
+    transition: all 0.3s ease;
+}
+
+.UploadedFiles__empty:hover {
+    border-color: var(--primary);
+    background: linear-gradient(135deg, rgba(0, 150, 136, 0.02) 0%, rgba(255, 255, 255, 0.98) 100%);
+}
+
+.UploadedFiles__empty-icon {
+    font-size: 48px;
+    color: #bdc3c7;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.UploadedFiles__empty-text {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.UploadedFiles__empty-text strong {
+    color: #34495e;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.UploadedFiles__empty-text span {
+    color: #7f8c8d;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .UploadedFiles {
+        padding: 0 10px;
+    }
+
+    .UploadedFiles__container {
+        gap: 20px;
+    }
+
+    .UploadedFiles__section {
+        min-width: 280px;
+    }
+
+    .UploadedFiles__title {
+        font-size: 18px;
+        padding: 12px;
+    }
+
+    .FileComponent {
+        padding: 16px;
+        gap: 12px;
+    }
+
+    .FileComponent__icon {
+        font-size: 32px;
+        min-width: 45px;
+        min-height: 45px;
+    }
+
+    .FileComponent__name {
+        font-size: 15px;
+    }
+
+    .UploadedFiles__empty {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .UploadedFiles__container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .UploadedFiles__section {
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .FileComponent {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+
+    .FileComponent__info {
+        align-items: center;
+    }
+
+    .FileComponent__details {
+        justify-content: center;
+    }
 }
