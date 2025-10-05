@@ -3,26 +3,24 @@ from fastapi.middleware.cors import CORSMiddleware
 from typing import List, Any
 from PIL import Image
 from io import BytesIO
-from PyPDF2 import PdfReader  # Note: Using PyPDF2 as per your original file
+from PyPDF2 import PdfReader
 from pydantic import BaseModel
 import docx
 import traceback
 import os
 import io
 
-# --- HYBRID OCR IMPORTS ---
+# --- HYBRID OCR / API IMPORTS ---
 import requests
 import base64
-from pdf2image import convert_from_bytes  # Requires Poppler utility
-# Tesseract is required for the legacy logic
-import pytesseract
-# NOTE: pytesseract path setup is missing in your current code block,
-# you should re-add it here if you deleted it, or ensure Tesseract is in your system PATH.
-# pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-# --------------------------
+from pdf2image import convert_from_bytes  # Requires external Poppler utility
+# --------------------------------
 
+# --- LOCAL IMPORTS ---
 from evaluation import keyword_matching, semantic_similarity, get_tone
 from text_preprocessing import clean_extracted_text, get_text_quality_score, get_improvement_suggestions
+
+# ---------------------
 
 # --- GEMINI API CONFIGURATION (FOR HIGH-ACCURACY HANDWRITING) ---
 GEMINI_API_KEY = ""  # *** PASTE YOUR GEMINI API KEY HERE ***
@@ -37,21 +35,13 @@ SYSTEM_INSTRUCTION_OCR = (
 app = FastAPI()
 
 
-# Pydantic models for API
-class TextComparisonRequest(BaseModel):
-    model_text: str
-    student_text: str
+# --- PYDANTIC MODELS (MUST BE DEFINED EARLY) ---
+class Answers(BaseModel):
+    model: str
+    student: str
 
 
-class TextComparisonResponse(BaseModel):
-    overall_score: float
-    grade: str
-    detailed_scores: dict
-    weights: dict
-    feedback: str
-    model_text_length: int
-    student_text_length: int
-
+# ------------------------------------------------
 
 app.add_middleware(
     CORSMiddleware,
@@ -76,7 +66,6 @@ def ocr_image_gemini(image: Image.Image) -> str:
     """Sends a single image to the Gemini API for transcription."""
 
     base64_image = image_to_base64(image)
-
     key_param = f"?key={GEMINI_API_KEY}" if GEMINI_API_KEY else ""
 
     payload = {
@@ -98,7 +87,7 @@ def ocr_image_gemini(image: Image.Image) -> str:
 
 
 def extract_text_from_image_bytes(image_bytes):
-    """Handles single image file bytes using Gemini OCR (for superior accuracy)."""
+    """Handles single image file bytes using Gemini OCR."""
     try:
         image = Image.open(BytesIO(image_bytes))
         raw_text = ocr_image_gemini(image)
@@ -126,7 +115,6 @@ def extract_text_from_pdf_bytes(pdf_bytes):
             text = page.extract_text() or ""
 
             if text.strip():
-                # Use PyPDF2 text if available
                 full_text.append(f"\n\n--- Page {i + 1} (Text Layer) ---\n{text}")
             else:
                 # b) Fallback to Gemini OCR for scanned pages
@@ -139,7 +127,6 @@ def extract_text_from_pdf_bytes(pdf_bytes):
                     full_text.append(f"\n\n--- Page {i + 1} failed image conversion ---")
 
     except Exception as e:
-        # Crucial check for Poppler error
         if "pdfinfo" in str(e) or "Poppler" in str(e):
             return f"PDF Error: Poppler utility is missing. Please install Poppler for your OS to enable scanned PDF OCR. Details: {e}"
         print(f"❌ PDF processing error: {e}")
@@ -158,7 +145,6 @@ def extract_text_from_docx_bytes(docx_bytes):
         full_text.append(para.text)
     text = '\n'.join(full_text)
 
-    # We must call clean_extracted_text for consistency
     cleaned_text = clean_extracted_text(text)
     print(f"DOCX extraction: Raw={len(text)} chars, Cleaned={len(cleaned_text)} chars")
     return cleaned_text
@@ -174,15 +160,12 @@ async def extractFileText(file: UploadFile = File(...)):
         file_extension = file.filename.split('.')[-1].lower()
 
         if file_extension in ('png', 'jpeg', 'jpg'):
-            print("🖼️ Processing as image using Gemini OCR...")
             extracted_text = extract_text_from_image_bytes(file_content)
             is_ocr = True
         elif file_extension == 'pdf':
-            print("📑 Processing as PDF, checking for scanned pages...")
             extracted_text = extract_text_from_pdf_bytes(file_content)
             is_ocr = True
         elif file_extension == 'docx':
-            print("📄 Processing as DOCX...")
             extracted_text = extract_text_from_docx_bytes(file_content)
             is_ocr = False
         else:
@@ -191,7 +174,6 @@ async def extractFileText(file: UploadFile = File(...)):
         if "Error" in extracted_text or "Error" in extracted_text:
             raise HTTPException(status_code=500, detail=extracted_text)
 
-        # Apply final cleaning (already done within the functions, but good to ensure)
         final_text = clean_extracted_text(extracted_text)
 
         return {
@@ -204,7 +186,6 @@ async def extractFileText(file: UploadFile = File(...)):
         }
 
     except HTTPException:
-        # Re-raise explicit HTTP exceptions
         raise
     except Exception as e:
         print(f"Error in file processing: {str(e)}")
@@ -219,9 +200,6 @@ async def evaluation(answers: Answers):
     try:
         model_answer = answers.model
         student_answer = answers.student
-
-        # The evaluation functions now expect clean text, so we clean inputs first.
-        # Although the NLP functions clean internally, this ensures robustness.
 
         (_, percent) = keyword_matching(model_answer, student_answer)
         semantics = semantic_similarity(model_answer, student_answer)
