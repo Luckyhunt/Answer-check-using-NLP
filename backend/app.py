@@ -23,7 +23,7 @@ from text_preprocessing import clean_extracted_text, get_text_quality_score, get
 # ---------------------
 
 # --- GEMINI API CONFIGURATION (FOR HIGH-ACCURACY HANDWRITING) ---
-GEMINI_API_KEY = "AIzaSyAr6pNkC5ZZgbjEVnoTBVeYpE9jPbnPUIE"  # *** PASTE YOUR GEMINI API KEY HERE ***
+GEMINI_API_KEY = "Your API key from google AI studio"  # *** PASTE YOUR GEMINI API KEY HERE ***
 GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent"
 
 SYSTEM_INSTRUCTION_OCR = (
