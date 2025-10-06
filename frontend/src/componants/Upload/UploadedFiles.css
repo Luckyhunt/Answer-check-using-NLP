@@ -14,8 +14,8 @@
 
 .UploadedFiles__section {
     flex: 1;
-    min-width: 300px;
-    max-width: 450px;
+    min-width: 400px;
+    max-width: 600px;
 }
 
 .UploadedFiles__title {
