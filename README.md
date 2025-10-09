@@ -116,7 +116,7 @@ pip install -r requirements.txt
 #### Download NLTK Data (Required)
 ```bash
 cd backend
-python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords'); nltk.download('wordnet')"
+python -c "import nltk; nltk.download('punkt_tab'); nltk.download('punkt'); nltk.download('stopwords'); nltk.download('wordnet')"
 ```
 
 #### Configure API Key
