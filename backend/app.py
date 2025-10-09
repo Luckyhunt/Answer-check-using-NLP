@@ -10,15 +10,20 @@ import traceback
 import os
 import io
 
+# --- HYBRID OCR / API IMPORTS ---
 import requests
 import base64
-from pdf2image import convert_from_bytes
+from pdf2image import convert_from_bytes  # Requires external Poppler utility
+# --------------------------------
 
 # --- LOCAL IMPORTS ---
 from evaluation import keyword_matching, semantic_similarity, get_tone
 from text_preprocessing import clean_extracted_text, get_text_quality_score, get_improvement_suggestions
 
-GEMINI_API_KEY = "AIzaSyAr6pNkC5ZZgbjEVnoTBVeYpE9jPbnPUIE"  # *** PASTE YOUR GEMINI API KEY HERE ***
+# ---------------------
+
+# --- GEMINI API CONFIGURATION (FOR HIGH-ACCURACY HANDWRITING) ---
+GEMINI_API_KEY = "Your API key from google AI studio"  # *** PASTE YOUR GEMINI API KEY HERE ***
 GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent"
 
 SYSTEM_INSTRUCTION_OCR = (
@@ -29,6 +34,8 @@ SYSTEM_INSTRUCTION_OCR = (
 
 app = FastAPI()
 
+
+# --- PYDANTIC MODELS (MUST BE DEFINED EARLY) ---
 class Answers(BaseModel):
     model: str
     student: str

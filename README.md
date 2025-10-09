@@ -72,6 +72,8 @@ Before running this project, ensure you have the following installed:
 - **Google Gemini API Key**: Required for OCR functionality
   - Get from: https://makersuite.google.com/app/apikey
   - Free tier available with reasonable limits
+  - **edit the Api key in Answer-check-using-NLP\backend\app.py
+  - line no. 26**
 
 ### System Dependencies (Required for PDF OCR)
 - **Poppler** (for pdf2image library)
@@ -88,7 +90,7 @@ Before running this project, ensure you have the following installed:
 
 ### 1. Clone the Repository
 ```bash
-git clone <repository-url>
+git clone https://github.com/Luckyhunt/Answer-check-using-NLP.git
 cd Answer-check-using-NLP
 ```
 
