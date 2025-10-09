@@ -94,6 +94,7 @@ const Evaluation = () => {
             setEvaluation({
                 keyword: response.keyword,
                 semantics: response.semantics,
+                wordCount: wordCount.student/wordCount.model,
                 tone: response.tone,
                 toneScore: response.toneScore
             })
@@ -107,7 +108,7 @@ const Evaluation = () => {
     const finalScore =
         (0.1 * evaluation.keyword * 100) + // Scale 0-1 (e.g., 0.8) -> (0.1 * 80) = 8
         (0.7 * evaluation.semantics * 100) +
-        (0.2 * evaluation.toneScore * 100);
+        (0.2 * evaluation.wordCount * 100);
 
     // Normalize back to 0-1 range for the bar logic (which uses testScore * 100)
     const testScore = finalScore / 100;
@@ -134,10 +135,6 @@ const Evaluation = () => {
                 <Metric
                     parameter="Semantics"
                     percent={Math.round(evaluation.semantics * 100)}
-                />
-                <Metric
-                    parameter={`Tone: ${evaluation.tone}`}
-                    percent={Math.round(evaluation.toneScore * 100)}
                 />
                 <Metric
                     parameter={`Word Count: ${wordCount.student}/${wordCount.model}`}
